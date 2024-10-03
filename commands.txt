@@ -1,0 +1,25 @@
+docker-compose build
+docker-compose run --rm app django-admin startproject core .
+docker exec -it django_app sh
+
+#Run Celery Task
+    python manage.py shell
+    from newapp.tasks import add
+    add.delay(2, 2)
+
+
+# settings for postgres:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
+    }
+}
+
+# settings for celery
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
